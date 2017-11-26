@@ -58,4 +58,8 @@ def read_image(path:str, spaces:str="BGR2RGB") -> np.ndarray:
 	img = cv2.imread(get_dir(path))
 
 	# Returns the converted image 
-	return convert_spaces(img, spaces) 
+	return convert_spaces(img, spaces)
+
+
+## Any questions on this code, please just
+## ask me (Mat)
