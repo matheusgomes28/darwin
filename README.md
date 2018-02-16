@@ -11,19 +11,19 @@ For the moment, this is where all the image processing stuff will go. Becca and 
   
 Obviously there will be other things that will need to be implemented, but the list above will be updated and the deadline for everything was set to be at the end of next week (Fry 23/02).
 
-			    _________
-			   /         /.
-    .-------------.       /_________/ |
-   /             / |      |         | |
-  /+============+\ |      | |====|  | |
-  ||C:\>        || |      |         | |
-  ||            || |      | |====|  | |
-  ||            || |      |   ___   | |
-  ||            || |      |  |166|  | |
-  ||            ||/@@@    |   ---   | |
-  \+============+/    @   |_________|./.
-		     @          ..  ....'
-  ..................@     __.'.'  ''
- /oooooooooooooooo//     ///
-/................//     /_/
-------------------
+				    _________
+				   /         /.
+	    .-------------.       /_________/ |
+	   /             / |      |         | |
+	  /+============+\ |      | |====|  | |
+	  ||C:\>        || |      |         | |
+	  ||            || |      | |====|  | |
+	  ||            || |      |   ___   | |
+	  ||            || |      |  |166|  | |
+	  ||            ||/@@@    |   ---   | |
+	  \+============+/    @   |_________|./.
+			     @          ..  ....'
+	  ..................@     __.'.'  ''
+	 /oooooooooooooooo//     ///
+	/................//     /_/
+	------------------
