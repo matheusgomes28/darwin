@@ -6,6 +6,17 @@ import numpy as np
 import filtering as fil
 
 
+def fft_size(n):
+	"""
+	This function will return the FFT 
+	optimal size for a given number n.
+	"""
+
+	# OpenCV's function to return the 
+	# optimal size s, such that
+	# s = (2^p)*(3^q)*(5^r) >= n.
+	return cv2.getOptimalDFTSize(n)
+
 def fourier(image):
 	"""
 	This function will use OpenCV to 
@@ -13,8 +24,14 @@ def fourier(image):
 	an image.
 	"""
 
+	# Get the padded image with optimal size 
+	rows, cols = image.shape # Get the original dims
+	nrows, ncols = fft_size(rows), fft_size(cols) # New dims
+	I = np.zeros((nrows, ncols)) # Zero array 
+	I[:rows, :cols] = image # Put the image inside padded array
+
 	# Calculate FFT (amplitude and phase)
-	dft = cv2.dft(np.float32(image), flags= cv2.DFT_COMPLEX_OUTPUT)
+	dft = cv2.dft(np.float32(I), flags= cv2.DFT_COMPLEX_OUTPUT)
 
 	# Shift DFT so frequency 0 is at center
 	shift = np.fft.fftshift(dft)
