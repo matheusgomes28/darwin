@@ -9,7 +9,7 @@ For the moment, this is where all the image processing stuff will go. Becca and 
   - CLI to pass location and other params.
   - Possibly a loading bar, so we know the progress.
   
-Obviously there will be other things that will need to be implemented, but the list above will be updated and the deadline for everything was set to be at the end of next week (Fry 23/02).
+Obviously there will be other things that will need to be implemented, but the list above will be updated and the deadline for everything was set to be at the end of next week (Fri 23/02).
 
 				          _________
 			   	        /         /.
