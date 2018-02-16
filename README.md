@@ -16,7 +16,7 @@ Obviously there will be other things that will need to be implemented, but the l
 	    .-----------------.        /_________/ |
 	   /                 / |      |         |  |
 	  /+================+\ |      | |====|  |  |
-	  ||C:\> import cv2  || |     |         |  |
+	  ||>>>  import cv2  || |     |         |  |
 	  ||                 || |     | |====|  |  |
 	  ||                 || |     |   ___   |  |
 	  ||                 || |     |  |166|  |  |
