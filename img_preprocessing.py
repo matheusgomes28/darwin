@@ -15,9 +15,13 @@ Arguments:
 """
 
 import files # For the file management stuff
-import os # For directory changing 
+import os # For directory changing
+import utilities as ut
+import analysis as an
+import numpy as np
 from colorama import Style, Fore, init # Colouring CLI stuff
 from docopt import docopt # CLI argument parser 
+from matplotlib import pyplot as plt
 
 
 # Main program here 
@@ -35,6 +39,7 @@ if __name__== "__main__":
 	# Use __doc__ string to parse cmd arguments
 	arguments = docopt(__doc__, version="1.0")
 
+
 	################################################
 	## PARSING THE CLI STUFF AND MAIN PROGRAM FLOW #
 	################################################
@@ -51,7 +56,25 @@ if __name__== "__main__":
 
 	images = files.get_images(root_path) # Note line below resets the blue 
 	print(Style.RESET_ALL + Fore.GREEN + "Available images in the path: ")
-	for i in images: print(i)
+
+	# This section will calculate the mean histogram
+	hist_size = 256 # Define matrix for storing histograms
+	histograms = np.zeros((len(images), hist_size))
+	for i, img_path in enumerate(images):
+		image_gray = ut.read_image(img_path, "BGR2GRAY")
+		histograms[i,:] = an.get_histogram(image_gray).ravel()
+
 	print(Style.RESET_ALL)
 
+	# Saving stuff to txt and figure
+	mean_hist = np.mean(histograms, axis=0) 
+	np.savetxt("histogram_model.txt", mean_hist)
+
+	# Saving the figure 
+	fig = plt.figure(figsize=(10, 5))
+	ax = plt.gca()
+	ax.set_title("Average histogram of dataset")
+	ax.plot(mean_hist)
+	plt.show()
+	plt.savefig("histogram.jpg")
 

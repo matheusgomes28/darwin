@@ -142,7 +142,7 @@ def get_relative_dir(path1, path2):
     return "/".join([rel_dir, os.path.basename(path2)])
 
 
-def is_image(img_path, formats=["jpg", "png", "gif", "pgm"]):
+def is_image(img_path, formats=["jpg", "png", "gif", "pgm", "tif"]):
     """
     Determines whether or not a
     given file is an image.
