@@ -68,6 +68,9 @@ def equalise(grey_image):
     image through histogram equalisation using
     the methods described in the notebook
     "Histogram Equalisation" 
+
+    Args: 
+        image - numpy array representing the image.
     """
     
     # Generate the intensity histogram for the image
@@ -126,3 +129,39 @@ def get_histogram(image):
     
     # Now return the stacked results
     return np.hstack([helper(comp) for comp in components])/n_pixels
+
+def manipulate(image, I, hist):
+    """
+    This funcion will take an image and the 
+    average histogram generated from a dataset
+    and manipulate the image's histogram to that
+    of the average one.
+
+    Args: 
+        image - numpy array representing the image.
+        I - List of numpy arrays of intensity locations
+            in primitive form, e.g I = [(i,j)]
+        hist - numpy array representing a histogram.
+
+    Returns: 
+        Numpy array representing altered image.
+    """
+
+    # Copy image 
+    altered = image.copy()
+    
+    # For loop doing the transformation
+    counter = 0 # Keep track of current index in I
+    for i in range(256):
+        N = int(hist[i])
+      
+        # Assign N first pixels to corresponding 
+        # intensity        
+        if N > 0: # Check whether assignments are actually made here
+            altered[np.split(I[counter:counter+N], 2, axis=1)] = i
+            
+        # Update counter so we start from correct place in I 
+        counter += N
+        
+    # Returned the modified image 
+    return altered
