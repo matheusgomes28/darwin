@@ -19,6 +19,7 @@ import os # For directory changing
 import utilities as ut
 import analysis as an
 import numpy as np
+import filtering as fil
 from colorama import Style, Fore, init # Colouring CLI stuff
 from docopt import docopt # CLI argument parser 
 from matplotlib import pyplot as plt
@@ -57,18 +58,28 @@ if __name__== "__main__":
 	images = files.get_images(root_path) # Note line below resets the blue 
 	print(Style.RESET_ALL + Fore.GREEN + "Available images in the path: ")
 
-	# This section will calculate the mean histogram
-	hist_size = 256 # Define matrix for storing histograms
-	histograms = np.zeros((len(images), hist_size))
+	# CALCULATE THE QUALITIES OF THE IMAGES
+	hist_size = 256
+	histograms = np.zeros((len(images), hist_size))  # Define matrix for storing histograms
+	stats = np.zeros((len(images), 2))				 # Define matrix for storing laplacian variance and ERR
+
 	for i, img_path in enumerate(images):
-		image_gray = ut.read_image(img_path, "BGR2GRAY")
+		image_gray = ut.read_image(img_path, "BGR2GRAY") #grayscale
+		lp = an.get_laplacian(image_gray)  # Laplacian
+
+		err = an.get_err(image_gray)
+
+		# Fill the matrices
 		histograms[i,:] = an.get_histogram(image_gray).ravel()
+		stats[i,0] = np.var(lp)
+		stats[i,1] = err
 
 	print(Style.RESET_ALL)
 
-	# Saving stuff to txt and figure
+	# Calculate the mean histogram of images and save
 	mean_hist = np.mean(histograms, axis=0) 
 	np.savetxt("histogram_model.txt", mean_hist)
+	np.savetxt("stats.txt", stats)
 
 	# Saving the figure 
 	fig = plt.figure(figsize=(10, 5))
