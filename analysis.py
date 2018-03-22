@@ -20,7 +20,9 @@ def fourier(image):
 	shift = np.fft.fftshift(dft)
 
 	# Amplitude and Phase spectrum
-	amp = 20*np.log(cv2.magnitude(shift[:,:,0], shift[:,:,1]))
+    m = cv2.magnitude(shift[:,:,0], shift[:,:,1])
+    m[np.isclose(m, 0)] = np.finf(float).eps
+	amp = 20*np.log(m) # Log everything ()
 	phase = cv2.phase(shift[:,:,0], shift[:,:,1])
 
 	# Return both sprectra 
