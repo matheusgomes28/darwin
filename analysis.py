@@ -130,7 +130,7 @@ def get_histogram(image):
     # Now return the stacked results
     return np.hstack([helper(comp) for comp in components])/n_pixels
 
-def manipulate(image, I, hist):
+def match_histogram(image, hist):
     """
     This funcion will take an image and the 
     average histogram generated from a dataset
@@ -139,13 +139,27 @@ def manipulate(image, I, hist):
 
     Args: 
         image - numpy array representing the image.
-        I - List of numpy arrays of intensity locations
-            in primitive form, e.g I = [(i,j)]
         hist - numpy array representing a histogram.
 
     Returns: 
         Numpy array representing altered image.
     """
+
+    # Get the number numper of rows and columns in the image
+    # for calculating how many pixels there are later on..
+    rows, cols = image.shape
+
+    # The next array contains a list of 2D matrices (256), 
+    # containing False and True values representing whether 
+    # or not the current pixel has the corresponding intensity
+    I_array = [image==i for i in range(256)] # 256 = #of intensities
+
+    # In the next few lines the actual final form of I is
+    # obtained using np.where. Note that each row in I
+    # corresponds to an index in the image array.
+    I = [np.where(locs) for locs in I_array]
+    I = np.hstack(I).T # Get the primitive locations
+                     # Note I.shape = (rows*cols, 2)
 
     # Copy image 
     altered = image.copy()
