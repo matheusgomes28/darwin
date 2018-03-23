@@ -15,7 +15,7 @@ Arguments:
 """
 
 import files # For the file management stuff
-import os # For directory changing
+import os, sys # For directory changing, sys stuff
 import utilities as ut
 import analysis as an
 import numpy as np
@@ -23,6 +23,29 @@ import filtering as fil
 from colorama import Style, Fore, init # Colouring CLI stuff
 from docopt import docopt # CLI argument parser 
 from matplotlib import pyplot as plt
+
+# Function for th loading bar
+def update_line(text, chars=["\033[F","\r"]): 
+    """
+    This function will output text on
+    the same line. I.e update the line
+    with the new text using ANSII.
+
+    Only use this for CLIs as info is printed to stdout.
+    """
+    
+    if os.name == 'nt':
+        # Print text and update cursor
+        sys.stdout.write(text)
+        sys.stdout.flush()
+
+        sys.stdout.write(chars[1])
+        sys.stdout.flush()	
+
+    else:
+        sys.stdout.write(text + "\n")
+        sys.stdout.write(chars[0])
+
 
 
 # Main program here 
@@ -63,6 +86,9 @@ if __name__== "__main__":
 	histograms = np.zeros((len(images), hist_size))  # Define matrix for storing histograms
 	stats = np.zeros((len(images), 2))				 # Define matrix for storing laplacian variance and ERR
 
+	# Reset colour
+	print(Style.RESET_ALL)
+	size = 20 # Length of the loading bar in chars
 	for i, img_path in enumerate(images):
 		image_gray = ut.read_image(img_path, "BGR2GRAY") #grayscale
 		lp = an.get_laplacian(image_gray)  # Laplacian
@@ -74,7 +100,15 @@ if __name__== "__main__":
 		stats[i,0] = np.var(lp)
 		stats[i,1] = err
 
-	print(Style.RESET_ALL)
+		# Progress bar stuff
+		perc = (i+1)/len(images)
+		bar = int(np.round(perc*size))
+		line = "Processing ["
+		line += "="*bar + " "*(size-bar)
+		line += "] {:d}%".format(int(np.round(perc*100)))
+		update_line(line) # Thins func will use carriage return
+	print("\nFinished processing.")
+
 
 	# Calculate the mean histogram of images and save
 	mean_hist = np.mean(histograms, axis=0) 
@@ -93,7 +127,7 @@ if __name__== "__main__":
 	fig = plt.figure(figsize=(10, 5))
 	ax = plt.gca()
 	ax.set_title("Laplacian Variance Histogram")
-	ax.hist(stats[:,0])
+	ax.hist(stats[:,0], bins=100)
 	fig.tight_layout()
 	plt.show()
 	plt.savefig("lv_histogram.jpg")
@@ -102,7 +136,7 @@ if __name__== "__main__":
 	fig = plt.figure(figsize=(10, 5))
 	ax = plt.gca()
 	ax.set_title("Equivalent Rectangle Resolution Histogram")
-	ax.hist(stats[:,1])
+	ax.hist(stats[:,1], bins=100)
 	fig.tight_layout()
 	plt.show()
 	plt.savefig("err_histogram.jpg")
