@@ -56,7 +56,7 @@ if __name__== "__main__":
 	print("Output directory...... %s\n" % out_path)
 
 	images = files.get_images(root_path) # Note line below resets the blue 
-	print(Style.RESET_ALL + Fore.GREEN + "Available images in the path: ")
+	print(Style.RESET_ALL + Fore.GREEN + "Number of images in the path: {:d}".format(len(images)))
 
 	# CALCULATE THE QUALITIES OF THE IMAGES
 	hist_size = 256
