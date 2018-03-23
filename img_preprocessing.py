@@ -84,8 +84,25 @@ if __name__== "__main__":
 	# Saving the figure 
 	fig = plt.figure(figsize=(10, 5))
 	ax = plt.gca()
-	ax.set_title("Average histogram of dataset")
+	ax.set_title("Average Histogram of the Dataset")
 	ax.plot(mean_hist)
 	plt.show()
 	plt.savefig("histogram.jpg")
 
+	# Plot the laplacian variance as a histogram 
+	fig = plt.figure(figsize=(10, 5))
+	ax = plt.gca()
+	ax.set_title("Laplacian Variance Histogram")
+	ax.hist(stats[:,0])
+	fig.tight_layout()
+	plt.show()
+	plt.savefig("lv_histogram.jpg")
+
+	# Plot the ERR as a histogram
+	fig = plt.figure(figsize=(10, 5))
+	ax = plt.gca()
+	ax.set_title("Equivalent Rectangle Resolution Histogram")
+	ax.hist(stats[:,1])
+	fig.tight_layout()
+	plt.show()
+	plt.savefig("err_histogram.jpg")
