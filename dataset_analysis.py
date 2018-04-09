@@ -4,7 +4,6 @@ This script will analyse and obtain some features from the
 dataset given. Note that most of the code used here comes
 from the 'analysis.py' file. 
 
-
 Usage:
     dataset_analysis.py ROOT OUTPUT
 
@@ -21,31 +20,6 @@ import numpy as np
 from colorama import Style, Fore, init # Colouring CLI stuff
 from docopt import docopt # CLI argument parser 
 from matplotlib import pyplot as plt
-
-# Function for the loading bar
-def update_line(text, chars=["\033[F","\r"]): 
-    """
-    This function will output text on
-    the same line. I.e update the line
-    with the new text using ANSII.
-
-    Only use this for CLIs as info is printed to stdout.
-    """
-
-    # If the system is Windows, we need
-    # to flush the output to reset pointers.
-    if os.name == 'nt':
-        # Print text and update cursor
-        sys.stdout.write(text)
-        sys.stdout.flush()
-
-        sys.stdout.write(chars[1])
-        sys.stdout.flush()	
-
-    else:
-        sys.stdout.write(text + "\n")
-        sys.stdout.write(chars[0])
-
 
 
 # Main program here 
@@ -104,18 +78,18 @@ if __name__== "__main__":
 		lp = an.get_laplacian(image_gray)  # Laplacian
 		err = an.get_err(image_gray) # Err
 
-		# Fill the matrices
+		# Fill the matrices (Log domain)	
 		histograms[i,:] = an.get_histogram(image_gray).ravel()
-		stats[i,0] = np.var(lp)
-		stats[i,1] = err
+		stats[i,0] = np.log(np.var(lp))
+		stats[i,1] = np.log(err)
 
 		# Progress bar stuff
-		perc = (i+1)/len(images)
+		perc = (i+1)/len(images)	
 		bar = int(np.round(perc*size))
 		line = "Processing ["
 		line += "="*bar + " "*(size-bar)
 		line += "] {:d}%".format(int(np.round(perc*100)))
-		update_line(line) # Thins func will use carriage return
+		ut.update_line(line) # Thins func will use carriage return
 	print("\nFinished processing.")
 
 	# Get saving directories
@@ -141,7 +115,7 @@ if __name__== "__main__":
 
 	ax3 = plt.subplot(2,2,4)
 	ax3.set_title("ERR Histogram")
-	ax3.hist(stats[:,1], bins=25)
+	ax3.hist(stats[:,1], bins=50)
 
 	fig.tight_layout()
 	plt.show()

@@ -30,29 +30,6 @@ import numpy as np
 from colorama import Style, Fore, init # Colouring CLI stuff
 from docopt import docopt # CLI argument parser
 
-# Function for the loading bar
-def update_line(text, chars=["\033[F","\r"]): 
-    """
-    This function will output text on
-    the same line. I.e update the line
-    with the new text using ANSII.
-
-    Only use this for CLIs as info is printed to stdout.
-    """
-    
-    if os.name == 'nt':
-        # Print text and update cursor
-        sys.stdout.write(text)
-        sys.stdout.flush()
-
-        sys.stdout.write(chars[1])
-        sys.stdout.flush()	
-
-    else:
-        sys.stdout.write(text + "\n")
-        sys.stdout.write(chars[0])
-
-
 
 # Main program here 
 if __name__== "__main__":
@@ -141,7 +118,7 @@ if __name__== "__main__":
 		line = "Processing ["
 		line += "="*bar + " "*(size-bar)
 		line += "] {:d}%".format(int(np.round(perc*100)))
-		update_line(line) # Thins func will use carriage return
+		ut.update_line(line) # Thins func will use carriage return
 
 	print("\nFinished processing.")
 	print(Style.RESET_ALL)

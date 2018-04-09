@@ -157,6 +157,43 @@ def is_image(img_path, formats=["jpg", "png", "gif", "pgm", "tif", "ppm"]):
     end = img_path[-3:]
     return os.path.isfile(img_path) and (end in formats)
 
+def get_filename(file_path):
+    """
+    This function uses the os library to return 
+    only the filename, without the extension.
+
+    Args:
+        file_path - string representing the path of the file.
+
+    Retrns:
+        string representing just the name, no extension.
+    """
+
+    # Get rid of directories and etc
+    just_file = os.path.basename(file_path)
+
+    # Now we return just the base name
+    return os.path.splitext(just_file)[0] 
+
+def append_path(path1, path2):
+    """
+    This function will append path2 to path1. This
+    allows for the creation of file paths within
+    directories.
+
+    Args:
+        path1 - str representing first path
+        path2 - str representing REL path from path1, file or folder.
+
+    Returns:
+        String with the absolute joined path.
+    """
+
+    # Get the first absolute path
+    abs_path1 = abspath(path1)
+
+    # Return the joined paths
+    return os.path.join(abs_path1, path2).replace("\\", "/")
 
 def copy_image(source, dest):
     """
@@ -179,32 +216,6 @@ def copy_image(source, dest):
     img = cv2.imread(abs_src)
     cv2.imwrite(abs_dst, img)
 
-
-def update_line(text, chars=["\033[F","\r"]): 
-    """
-    This function will output text on the same line.
-    I.e update the line with the new text using 
-    ANSII.
-
-    Params:
-    text - string of text to update line with.
-    chars - list containing reset character (os dependent).
-
-    returns -> Null.
-    """
-    
-    if os.name == 'nt':
-        # Print text and update cursor
-        sys.stdout.write(text)
-        sys.stdout.flush()
-
-        sys.stdout.write(chars[1])
-        sys.stdout.flush()
-
-    else:
-        sys.stdout.write(text + "\n")
-        sys.stdout.write(chars[0])
-        
 if __name__ == "__main__": #testing code here
     print(os.getcwd())
     print(get_files(os.getcwd()))

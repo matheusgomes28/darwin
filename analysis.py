@@ -63,6 +63,40 @@ def get_err(grey_image):
 	# Return tau = E_f/|f(0)|^2
 	return E_f/np.power(np.abs(f0), 2) 
 
+def get_rect(grey_image):
+	"""
+	This function will return the bounding rectangle 
+	coordinates. It uses canny edge detection to identify
+	the important edges, then a simple where search to 
+	find the min and maxima points where the edges occur.
+
+	Args:
+		gre_image - np array representing the image data.
+
+	Returns:
+		(x1, y1, x2, y2) tuple representing the diagonal 
+		vertices f the bounding rectangle.
+	"""
+
+	# Pre filter to remove the noise in black areas
+	gaussian_n = np.round(np.max(grey_image.shape)*0.004) # Gaussian size
+	gaussian = fil.gaussian_kernel(int(gaussian_n), [0,0], 0.429*gaussian_n)
+	grey_image = fil.image_conv(grey_image, gaussian) # Apply by convolution
+
+	# Canny edge and image ditalion stuf
+	canny_img = cv2.Canny(grey_image, 10, 60, 10) # Simple canny detection
+	dilate_size = int(np.round(np.max(grey_image.shape)*0.025)) # Size of rel dilation 
+	canny_img = cv2.dilate(canny_img, np.ones((dilate_size, dilate_size)))
+
+
+	# Get the edge colour (assuming 0s are not edges)
+	edge_c = np.max(canny_img)
+
+	# Get the ags where the edges occur (rows and cols)
+	rows, cols = np.where(canny_img == edge_c)
+
+	# Simply return out tuple of coords now
+	return (np.min(cols), np.min(rows), np.max(cols), np.max(rows))
 
 def equalise(grey_image):
 	"""
@@ -147,9 +181,13 @@ def match_histogram(image, hist):
 		Numpy array representing altered image.
 	"""
 
+
 	# Get the number numper of rows and columns in the image
 	# for calculating how many pixels there are later on..
 	rows, cols = image.shape
+
+	# Normalise the histogram
+	hist = (rows*cols*hist)/np.sum(hist)
 
 	# The next array contains a list of 2D matrices (256), 
 	# containing False and True values representing whether 

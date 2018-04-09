@@ -7,12 +7,16 @@ Jupyter notebook in order to load, show and
 analyse images in the correct format 
 (Matplotlib), and convert between colour 
 spaces (E.g BGR -> RGB).
+
+Some other code may be dumped here if 
+its being used a lot in multiple scripts.
 """
 # Version 0.1 - Python 3.x
 
 import cv2, sys, os
 import numpy as np
 import cv2
+import files 
 
 # This holds the strings for the conversion
 # for the conversion codes. Feel free to add 
@@ -24,18 +28,6 @@ convert_strs = {
 				 "RGB2BGR" : cv2.COLOR_RGB2BGR,
 				 "RGB2GRAY": cv2.COLOR_RGB2GRAY,
 			   }
-
-def get_dir(path:str):
-	"""
-	Thiis function will be used to parse
-	path string into directory objects in
-	Python. Very useful for cross platform 
-	(as Windows and Unix paths are not 
-	compatible).
-	"""
-
-	# Change to proper OS directory
-	return path
 
 def convert_spaces(img:np.ndarray, spaces:str) -> np.ndarray:
 
@@ -55,10 +47,47 @@ def read_image(path:str, spaces:str="BGR2RGB") -> np.ndarray:
 	"""
 
 	# Load image (BGR)
-	img = cv2.imread(get_dir(path))
+	img = cv2.imread(path)
 
 	# Returns the converted image 
 	return convert_spaces(img, spaces)
+def save_image(filename:str, image:np.ndarray):
+	"""
+	Uses OpenCV to write an image to the disk. Make
+	sure the path given in filename already exists,
+	OpenCV does NOT create new directories.
+
+	Args:
+		filename - String representing the path + filename + extension.
+		image - Np array with the image data.
+	"""
+
+	# For more info, view the OpenCV documentation
+	cv2.imwrite(filename, image)
+
+# Function for the loading bars
+def update_line(text, chars=["\033[F","\r"]): 
+    """
+    This function will output text on
+    the same line. I.e update the line
+    with the new text using ANSII.
+
+    Only use this for CLIs as info is printed to stdout.
+    """
+
+    # If windows is being used, flush explicitly or 
+    # cmd won't output properly.
+    if os.name == 'nt':
+        # Print text and update cursor
+        sys.stdout.write(text)
+        sys.stdout.flush()
+
+        sys.stdout.write(chars[1])
+        sys.stdout.flush()	
+
+    else:
+        sys.stdout.write(text + "\n")
+        sys.stdout.write(chars[0])
 
 
 ## Any questions on this code, please just
