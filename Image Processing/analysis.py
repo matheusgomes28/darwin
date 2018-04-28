@@ -1,4 +1,4 @@
-# File containing al the
+# File containing all the
 # analysis code such as the
 # Fourier transform.
 import cv2
@@ -41,7 +41,7 @@ def get_laplacian(image_grey):
     return fil.image_conv(image_grey, kernel)
 
 
-def get_err(grey_image) :
+def get_err(grey_image):
 	"""
 	This function will get the ERR of an image
 	using the method explained in the "Fourier
@@ -61,3 +61,31 @@ def get_err(grey_image) :
 	# Return tau = E_f/|f(0)|^2
 	return E_f/np.power(np.abs(f0), 2) 
 
+
+def equalise(grey_image):
+    """
+    This function will transfrom a grayscale 
+    image through histogram equalisation using
+    the methods described in the notebook
+    "Histogram Equalisation" 
+    """
+    
+    # Generate the intensity histogram for the image
+    hist = cv2.calcHist([grey_img],[0],None,[256],[0,256])
+    
+    # Calculate the cumulative probability for the image
+    cf = np.cumsum(hist/(grey_img.shape[0] * grey_img.shape[1]))
+    
+    # Transform the intensities in the image
+    for row in range(grey_img.shape[0]):
+        for col in range(grey_img.shape[1]):
+                grey_img[row, col] = cf[grey_img[row, col]] * 256
+        
+    # Generate the intensity histogram for the altered image
+    new_hist = cv2.calcHist([grey_img],[0],None,[256],[0,256])
+
+    # Calculate the cumulative probability of the altered image
+    n_cf = np.cumsum(new_hist/(grey_img.shape[0] * grey_img.shape[1]))
+    
+    # Return the transformed image
+    return grey_image
