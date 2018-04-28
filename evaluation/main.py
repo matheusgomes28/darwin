@@ -11,7 +11,7 @@ class MyWindow(QtGui.QMainWindow):
         self.show()
         self.answers = []
 
-        image_path = 'original/'
+        image_path = '../../images/preprocessed'
         self.images = [name for name in os.listdir(image_path) if os.path.isfile(image_path + name)]
         self.fileNum = len(self.images)
         self.fileCount = 0
@@ -22,10 +22,21 @@ class MyWindow(QtGui.QMainWindow):
         self.nearButton.clicked.connect(lambda: self.near_image('Test'))
         self.incorrectButton.clicked.connect(lambda: self.incorrect_image('Test'))
 
-        img1_scene = QtGui.GraphicsScene()
-        self.original.setScene(img1_scene)
-        img = Image.open(self.images[0])
-        view = QtGui.GraphicsView(img1_scene)
+        # Create a scene for the Graphics view
+        self.sceneOriginal = QtGui.QGraphicsScene()
+        self.original.setScene(self.sceneOriginal)
+
+        # Loading with widget QImage
+        image_data = open("img.jpg", "rb")
+        image_widget = QtGui.QImage()   
+        image_widget.loadFromData(bytes(image_data.read()))
+
+        # Get the pixel map data
+        px_map = QtGui.QPixmap.fromImage(image_widget)
+        px_map_resized = px_map.scaledToHeight(350)
+        graphics_obj = QtGui.QGraphicsPixmapItem(px_map_resized)
+        self.sceneOriginal.addItem(graphics_obj)
+        self.sceneOriginal.update()
 
     def correct_image(self, filename):
         self.update(filename, 1)
