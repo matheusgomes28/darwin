@@ -1,8 +1,9 @@
 import sys
-from PIL import Image
 from PyQt4 import QtGui, QtCore, uic
 import os, os.path, csv
 
+sys.path.append(os.path.abspath('../'))
+import files
 
 class MyWindow(QtGui.QMainWindow):
     def __init__(self):
@@ -11,8 +12,8 @@ class MyWindow(QtGui.QMainWindow):
         self.show()
         self.answers = []
 
-        image_path = '../../images/preprocessed'
-        self.images = [name for name in os.listdir(image_path) if os.path.isfile(image_path + name)]
+        image_path = 'original/'
+        self.images = files.get_images(files.abspath(image_path))
         self.fileNum = len(self.images)
         self.fileCount = 0
 
@@ -27,16 +28,18 @@ class MyWindow(QtGui.QMainWindow):
         self.original.setScene(self.sceneOriginal)
 
         # Loading with widget QImage
-        image_data = open("img.jpg", "rb")
-        image_widget = QtGui.QImage()   
-        image_widget.loadFromData(bytes(image_data.read()))
+        print(self.images[0])
 
-        # Get the pixel map data
-        px_map = QtGui.QPixmap.fromImage(image_widget)
-        px_map_resized = px_map.scaledToHeight(350)
-        graphics_obj = QtGui.QGraphicsPixmapItem(px_map_resized)
-        self.sceneOriginal.addItem(graphics_obj)
-        self.sceneOriginal.update()
+        with open('img.jpg', 'rb') as img_buffer:
+            image_widget = QtGui.QImage()
+            image_widget.loadFromData(img_buffer.read())
+
+            # Get the pixel map data
+            px_map = QtGui.QPixmap.fromImage(image_widget)
+            px_map_resized = px_map.scaledToHeight(350)
+            graphics_obj = QtGui.QGraphicsPixmapItem(px_map_resized)
+            self.sceneOriginal.addItem(graphics_obj)
+            self.sceneOriginal.update()
 
     def correct_image(self, filename):
         self.update(filename, 1)
