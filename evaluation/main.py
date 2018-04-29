@@ -142,7 +142,7 @@ class MyWindow(QtGui.QMainWindow):
         self.fileCount += 1 
 
         # Save the stuff when reached the end
-        if self.fileCount > self.fileNum:
+        if self.fileCount >= self.fileNum:
 
             # Oepn
             with open('images.csv', 'w', newline='') as out:
