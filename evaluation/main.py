@@ -91,17 +91,12 @@ class MyWindow(QtGui.QMainWindow):
         width = self.original.width()
         height = self.original.height()
 
-        # Try to open the image 
-        with open(img_path, "rb") as img_buffer:
-            image_widget = QtGui.QImage()
-            image_widget.loadFromData(img_buffer.read())
-
-            # Get the pixel map data
-            px_map = QtGui.QPixmap.fromImage(image_widget)
-            px_map_rezised = px_map.scaledToHeight(height-2)
-            graphics_obj = QtGui.QGraphicsPixmapItem(px_map_rezised)
-            scene_obj.addItem(graphics_obj)
-            scene_obj.update()
+        # Get the pixel map data
+        px_map = QtGui.QPixmap(img_path, format="jpg")
+        px_map_rezised = px_map.scaledToHeight(height-2)
+        graphics_obj = QtGui.QGraphicsPixmapItem(px_map_rezised)
+        scene_obj.addItem(graphics_obj)
+        scene_obj.update()
 
     def next_image(self):
         """
