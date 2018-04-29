@@ -29,8 +29,10 @@ import files
 class MyWindow(QtWidgets.QMainWindow):
     def __init__(self, original_path, result_path):
         super(MyWindow, self).__init__()
+
         uic.loadUi('eval_gui.ui', self)
         self.show()
+        self.setWindowTitle("Evaluation")
         self.answers = []
 
         # Load the list of images and shuffle them
