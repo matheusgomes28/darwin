@@ -21,7 +21,8 @@ def abspath(path):
     returns -> str representing absolute path in curr os.
     """
 
-    return os.path.abspath(path).replace("\\","/")
+    return os.path.abspath(path).replace("\\", "/")
+
 
 def relpath(path):
     """
@@ -37,6 +38,7 @@ def relpath(path):
 
     return os.path.relpath(path).replace("\\", "/")
 
+
 def get_images(path):
     """
     This function will return a list with all the
@@ -47,11 +49,11 @@ def get_images(path):
 
     returns -> list of string containing all the images.
     """
-    
+
     # Cast path to absolute path
     absolute = abspath(path)
 
-    img_lis = [] # Holds images in a folder
+    img_lis = []  # Holds images in a folder
     file_lis = get_files(absolute)
 
     # Now get the images within file list
@@ -70,16 +72,17 @@ def get_files(path):
 
     returns -> list of strings containing all the files in a dir.
     """
-    
+
     # Uses abs path as the directory
     absolute = abspath(path)
-    all_files = os.listdir(absolute) 
+    all_files = os.listdir(absolute)
 
     # Get the absolute path of each file
     absolute_files = ["/".join([absolute, i]) for i in all_files]
 
     # Filter out non-files and return
     return [f for f in absolute_files if os.path.isfile(f)]
+
 
 def get_directories(path):
     """
@@ -95,13 +98,12 @@ def get_directories(path):
     # Uses abspath as the directory
     absolute = abspath(path)
     all_files = os.listdir(abspath(absolute))
-    
+
     # Get the absolute path of each file
     absolute_files = ["/".join([absolute, d]) for d in all_files]
 
     # Here we filter all non-directires out and return
     return [i for i in absolute_files if os.path.isdir(i)]
-
 
 
 def get_relative_dir(path1, path2):
@@ -121,22 +123,24 @@ def get_relative_dir(path1, path2):
     returns -> string representing path2 relative to path1.
     """
 
-    originalwd = os.getcwd() # Get original working directory
-
+    originalwd = os.getcwd()  # Get original working directory
 
     # Get directories if files given
-    if os.path.isdir(path1): dir1 = path1
-    else:dir1 = os.path.dirname(path1)
-    
-    if os.path.isdir(path2): dir2 = path2
-    else: dir2 = os.path.dirname(path2)
-    
+    if os.path.isdir(path1):
+        dir1 = path1
+    else:
+        dir1 = os.path.dirname(path1)
+
+    if os.path.isdir(path2):
+        dir2 = path2
+    else:
+        dir2 = os.path.dirname(path2)
 
     # Change working dir
     os.chdir(dir1)
     rel_dir = relpath(dir2)
 
-    os.chdir(originalwd) # switch back to wd
+    os.chdir(originalwd)  # switch back to wd
 
     # return the relative path
     return "/".join([rel_dir, os.path.basename(path2)])
@@ -153,9 +157,10 @@ def is_image(img_path, formats=["jpg", "png", "gif", "pgm", "tif", "ppm"]):
 
     returns -> True if file is image, False if not.
     """
-    #formats = ["jpg", "png", "gif", "pgm"]
+    # formats = ["jpg", "png", "gif", "pgm"]
     end = img_path[-3:]
     return os.path.isfile(img_path) and (end in formats)
+
 
 def get_filename(file_path):
     """
@@ -173,7 +178,8 @@ def get_filename(file_path):
     just_file = os.path.basename(file_path)
 
     # Now we return just the base name
-    return os.path.splitext(just_file)[0] 
+    return os.path.splitext(just_file)[0]
+
 
 def append_path(path1, path2):
     """
@@ -194,6 +200,7 @@ def append_path(path1, path2):
 
     # Return the joined paths
     return os.path.join(abs_path1, path2).replace("\\", "/")
+
 
 def copy_image(source, dest):
     """
@@ -216,6 +223,7 @@ def copy_image(source, dest):
     img = cv2.imread(abs_src)
     cv2.imwrite(abs_dst, img)
 
-if __name__ == "__main__": #testing code here
+
+if __name__ == "__main__":  # testing code here
     print(os.getcwd())
     print(get_files(os.getcwd()))

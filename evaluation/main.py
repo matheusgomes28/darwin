@@ -15,7 +15,7 @@ Arguments:
 
 import sys, os
 from random import shuffle 
-from PyQt4 import QtGui, QtCore, uic
+from PyQt5 import QtWidgets, QtCore, QtGui, uic
 import csv
 
 # For the CLI stuff
@@ -26,7 +26,7 @@ from colorama import Style, Fore, init
 sys.path.append(os.path.abspath('../'))
 import files
 
-class MyWindow(QtGui.QMainWindow):
+class MyWindow(QtWidgets.QMainWindow):
     def __init__(self, original_path, result_path):
         super(MyWindow, self).__init__()
         uic.loadUi('eval_gui.ui', self)
@@ -62,8 +62,8 @@ class MyWindow(QtGui.QMainWindow):
 
         # Create the scenes for the 2D graphics viewers
         self.scenes = {
-            "original" : QtGui.QGraphicsScene(),
-            "result" : QtGui.QGraphicsScene()
+            "original" : QtWidgets.QGraphicsScene(),
+            "result" : QtWidgets.QGraphicsScene()
         }
 
         # Bind the scenes to the correct objs
@@ -94,7 +94,7 @@ class MyWindow(QtGui.QMainWindow):
         # Get the pixel map data
         px_map = QtGui.QPixmap(img_path, format="jpg")
         px_map_rezised = px_map.scaledToHeight(height-2)
-        graphics_obj = QtGui.QGraphicsPixmapItem(px_map_rezised)
+        graphics_obj = QtWidgets.QGraphicsPixmapItem(px_map_rezised)
         scene_obj.addItem(graphics_obj)
         scene_obj.update()
 
@@ -190,6 +190,6 @@ if __name__ == '__main__':
     print(Style.RESET_ALL)
 
     # Creating the GUI and  setting exit criteria
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = MyWindow(original_path, result_path)
     sys.exit(app.exec_())
