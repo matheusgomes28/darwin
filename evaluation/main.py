@@ -16,7 +16,7 @@ Arguments:
 import sys, os
 from random import shuffle 
 from PyQt5 import QtWidgets, QtCore, QtGui, uic
-import csv
+import csv, time
 
 # For the CLI stuff
 from docopt import docopt
@@ -75,6 +75,10 @@ class MyWindow(QtWidgets.QMainWindow):
         # For each scene, draw the first image at th start
         for s_name, s_obj in self.scenes.items():
             self.__set_scene_image(s_name, self.img_paths[s_name][0])
+        
+        # Timing user input
+        self.timeStart = time.process_time()
+
 
     def __set_scene_image(self, scene, img_path):
         """
@@ -127,16 +131,24 @@ class MyWindow(QtWidgets.QMainWindow):
         self.next_image()
 
     def update(self, answer):
+        # Calculating response time
+        self.timeEnd = time.process_time()
+        timeDiff = self.timeEnd - self.timeStart
 
+        # Printing out test result
         print('Answer {}: {}'.format(self.fileCount + 1, answer))
+        print('{}s Elapsed'.format(timeDiff))
 
         # Get the current filename (only if we're still in range of the images)
         if self.fileCount < self.fileNum:
             filename = files.get_filename(self.img_paths['original'][self.fileCount])
-            self.answers.append([filename, answer])
+            self.answers.append([filename, answer, timeDiff])
 
         # Increase the pointer
-        self.fileCount += 1 
+        self.fileCount += 1
+
+        # Reset the timer
+        self.timeStart = time.process_time()
 
         # Save the stuff when reached the end
         if self.fileCount >= self.fileNum:
@@ -144,7 +156,7 @@ class MyWindow(QtWidgets.QMainWindow):
             # Oepn
             with open('images.csv', 'w', newline='') as out:
                 csv_out = csv.writer(out)
-                csv_out.writerow(['filename', 'answer'])
+                csv_out.writerow(['filename', 'answer', 'elapsed'])
                 for row in self.answers:
                     csv_out.writerow(row)
 
