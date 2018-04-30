@@ -12,6 +12,7 @@ Arguments:
 """
 
 import sys, os, csv
+from collections import Counter
 from docopt import docopt
 from colorama import Style, Fore, init 
 import matplotlib.pyplot as plt
@@ -31,6 +32,19 @@ def gather_data(directory):
     
     return data
 
+def plot_responses(data):
+    # Gather response data
+    response_count = Counter([r for _, r, _ in data])
+    responses = [response_count['0'], response_count['1'], response_count['2']]
+
+    fig = plt.figure(figsize=(8, 5))
+    x = ['Incorrect', 'Correct', 'Near/Close']
+    y = responses
+    plt.bar(x, y, 1, color='red')
+    plt.xlabel('Response Types')
+    plt.ylabel('# Responses')
+    plt.title('Evaluation Responses')
+    plt.show()
 
 if __name__ == '__main__':
     # Change cwd to the current file's directory
@@ -59,4 +73,4 @@ if __name__ == '__main__':
     print(Style.RESET_ALL)
 
     data = gather_data(eval_path)
-    print(data)
+    plot_responses(data)

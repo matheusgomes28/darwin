@@ -57,12 +57,12 @@ def get_images(path):
     file_lis = get_files(absolute)
 
     # Now get the images within file list
-    img_lis = [f for f in file_lis if is_image(f)]
+    img_lis = [f for f in file_lis if is_filetype(f)]
 
     return img_lis
 
 
-def get_files(path):
+def get_files(path, formats=[]):
     """
     This function will return a list of all files in 
     the given directory.
@@ -81,7 +81,13 @@ def get_files(path):
     absolute_files = ["/".join([absolute, i]) for i in all_files]
 
     # Filter out non-files and return
-    return [f for f in absolute_files if os.path.isfile(f)]
+    filtered_files = [f for f in absolute_files if os.path.isfile(f)]
+
+    # Filter out unwanted file types (if requested)
+    if formats:
+        filtered_files = [f for f in filtered_files if is_filetype(f, formats)]
+    
+    return filtered_files
 
 
 def get_directories(path):
@@ -146,7 +152,7 @@ def get_relative_dir(path1, path2):
     return "/".join([rel_dir, os.path.basename(path2)])
 
 
-def is_image(img_path, formats=["jpg", "png", "gif", "pgm", "tif", "ppm"]):
+def is_filetype(img_path, formats=["jpg", "png", "gif", "pgm", "tif", "ppm"]):
     """
     Determines whether or not a
     given file is an image.
