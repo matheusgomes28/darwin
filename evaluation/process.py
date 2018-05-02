@@ -124,9 +124,9 @@ if __name__ == '__main__':
     c_time = response_times['1'] if '1' in response_times else 0.0
     n_time = response_times['2'] if '2' in response_times else 0.0
 
-    print('Incorrect: {}%, Av. Response: {}s'.format(i_responses, i_time))
-    print('Correct: {}%, Av. Response: {}s'.format(c_responses, c_time))
-    print('Near/Close: {}%, Av. Response: {}s'.format(n_responses, n_time))
+    print('Incorrect: {:.3f}%, Av. Response: {:.3f}s'.format(i_responses, i_time))
+    print('Correct: {:.3f}%, Av. Response: {:.3f}s'.format(c_responses, c_time))
+    print('Near/Close: {:.3f}%, Av. Response: {:.3f}s'.format(n_responses, n_time))
 
     plot_responses(responses)
     # plot_response_times(data)
