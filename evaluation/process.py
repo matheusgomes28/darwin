@@ -56,14 +56,16 @@ def gather_response_times(data):
         data        data in format [(filename, response, response_time)]
     """
 
-    averages = {}
+    averages, divisor = {}, {}
     response_times = [(r, t) for _, r, t in data]
     for r, t in response_times:
         if r not in averages:
-            averages[r] = t
+            averages[r] = float(t)
+            divisor[r] = 1
         else:
-            averages[r] += t
-    return averages
+            averages[r] += float(t)
+            divisor[r] += 1
+    return {x : averages[x] / float(divisor[x]) for x in averages}
     
 
 def plot_responses(responses):
