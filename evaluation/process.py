@@ -46,8 +46,8 @@ def gather_responses(data):
         data        data in format [(filename, response, response_time)]
     """
 
-    response_count = Counter([r for _, r, _ in data])
-    return [response_count['0'], response_count['1'], response_count['2']]
+    response_count = Counter([int(r) for _, r, _ in data])
+    return [response_count[0], response_count[1], response_count[2]]
 
 def gather_response_times(data):
     """ Gathers response times of each response from supplied data
